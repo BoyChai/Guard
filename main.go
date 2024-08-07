@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/BoyChai/Guard/config"
 	"github.com/BoyChai/Guard/controller/http"
 	"github.com/BoyChai/Guard/controller/middle"
+	"github.com/BoyChai/Guard/controller/socket"
 	"github.com/BoyChai/Guard/dao"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -21,6 +24,11 @@ func main() {
 	g.Use(middle.CORS())
 	g.Use(middle.JWTAuth())
 	http.Router.InitApiRouter(g)
-	// 启动
+	// 启动socket
+	if viper.GetBool("Settings.Socket") {
+		go socket.StartSocket()
+		fmt.Println("Socket客户端已启动 Port:" + viper.GetString("Settings.Socket_Port"))
+	}
+	// 启动http
 	g.Run(":" + viper.GetString("Settings.Port"))
 }

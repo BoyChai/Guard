@@ -10,10 +10,12 @@ DATABASE:
 
 # 设置
 Settings:
-  Port: 8080
+  Port: 7779
   SuperUserName: admin
   SuperUserPass: Qwer1234
   PassSalt: GUARD
   JWT_SECRET: GUARD
   HTTP_Allow_Origin: "*"
-  Private_Key_PATH: "../private.key"
+  Private_Key_PATH: "private.pem"
+  Socket: true
+  Socket_Port: 7780
