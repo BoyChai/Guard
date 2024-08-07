@@ -14,16 +14,16 @@ func (d *dao) CreateUser(name string, pass string) (uint, error) {
 }
 
 // CheckUser 用户校验
-func (d *dao) CheckUser(name string, pass string) (bool, error) {
+func (d *dao) CheckUser(name string, pass string) (uint, error) {
 	var user User
 	err := Dao.db.Where("name = ?", name).First(&user).Error
 	if err != nil {
-		return false, err
+		return 0, err
 	}
 	if user.Pass != utils.CalculateMD5Hash(pass) {
-		return false, err
+		return 0, err
 	}
-	return true, nil
+	return user.ID, nil
 }
 
 // DeleteUserByID 删除用户

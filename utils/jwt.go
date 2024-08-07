@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/spf13/viper"
 )
@@ -59,4 +60,13 @@ func ParseToken(tokenString string) (*MyClaims, error) {
 		return claims, nil
 	}
 	return nil, errors.New("TokenInvalid")
+}
+
+// GetAuthInfo 授权信息获取
+func GetAuthInfo(c *gin.Context) (string, error) {
+	claims, exists := c.Get("claims")
+	if !exists {
+		return "", errors.New("授权信息获取错误")
+	}
+	return claims.(*MyClaims).ID, nil
 }
