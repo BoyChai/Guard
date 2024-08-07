@@ -25,7 +25,7 @@ type User struct {
 type Card struct {
 	gorm.Model
 	// 卡密
-	Key string
+	Key string `gorm:"unique"`
 	// 结束时间
 	EndDate time.Time
 	// 创建用户
