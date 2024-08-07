@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 
+	"github.com/google/uuid"
 	"github.com/spf13/viper"
 )
 
@@ -18,4 +19,8 @@ func CalculateMD5Hash(input string) string {
 	// 将字节数组转换为16进制字符串
 	hashString := hex.EncodeToString(hashBytes)
 	return hashString
+}
+
+func GenerateUUID() string {
+	return uuid.New().String()
 }

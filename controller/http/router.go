@@ -13,5 +13,10 @@ func (r *router) InitApiRouter(router *gin.Engine) {
 	router.GET("/api/user/getList", User.GetUserList).
 		POST("/api/user/login", User.Login).
 		POST("/api/user/create", User.CreateUser).
-		DELETE("/api/user/delete", User.DeleteUser)
+		DELETE("/api/user/delete", User.DeleteUser).
+		// 卡密相关api
+		GET("/api/card/getList", Card.GetCardList).
+		POST("/api/card/create", Card.CreateCard).
+		DELETE("/api/card/delete", Card.DeleteCardByID).
+		PUT("/api/card/update", Card.UpdateCardEndDateByID)
 }
