@@ -1,8 +1,10 @@
 package config
 
 import (
+	"log"
 	"os"
 
+	"github.com/BoyChai/Guard/utils"
 	"github.com/spf13/viper"
 )
 
@@ -15,5 +17,10 @@ func InitConfig() {
 	err := viper.ReadInConfig()
 	if err != nil {
 		return
+	}
+	// 解析私钥
+	utils.PrivateKey, err = utils.ParsePrivateKey(viper.GetString("Settings.Private_Key_PATH"))
+	if err != nil {
+		log.Fatalln("通信私钥读取错误", err.Error())
 	}
 }

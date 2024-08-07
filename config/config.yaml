@@ -16,3 +16,4 @@ Settings:
   PassSalt: GUARD
   JWT_SECRET: GUARD
   HTTP_Allow_Origin: "*"
+  Private_Key_PATH: "../private.key"

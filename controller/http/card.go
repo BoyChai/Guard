@@ -110,3 +110,27 @@ func (c *card) UpdateCardEndDateByID(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, utils.HtpJson("修改卡密有效期成功", nil))
 }
+
+// CheckCard卡密的校验
+func (c *card) CheckCard(ctx *gin.Context) {
+	params := new(struct {
+		Msg string `form:"msg" binding:"required"`
+	})
+	if err := ctx.ShouldBindJSON(&params); err != nil {
+		ctx.JSON(http.StatusInternalServerError, utils.HtpJson("绑定参数错误", err.Error()))
+		return
+	}
+	data, err := utils.DecryptWithPrivateKey(params.Msg)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, utils.HtpJson("数据解析失败", err.Error()))
+	}
+	isTrue, err := dao.Dao.CheckCard(data)
+	if !isTrue {
+		ctx.JSON(http.StatusOK, utils.HtpJson("卡密校验失败", err.Error()))
+	}
+	signData, err := utils.SignData(params.Msg)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, utils.HtpJson("签名失败", err.Error()))
+	}
+	ctx.JSON(http.StatusOK, signData)
+}

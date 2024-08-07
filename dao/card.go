@@ -1,6 +1,9 @@
 package dao
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 // 列出所有卡密
 func (d *dao) ListCard() ([]Card, error) {
@@ -28,7 +31,7 @@ func (d *dao) CheckCard(key string) (bool, error) {
 		return false, err
 	}
 	if card.EndDate.Before(time.Now()) {
-		return false, nil
+		return false, errors.New("卡密已过期")
 	}
 	return true, nil
 }
