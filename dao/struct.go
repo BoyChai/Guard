@@ -14,8 +14,7 @@ type dao struct {
 
 // User 用户表
 type User struct {
-	// ID用户的唯一标识
-	ID uint `gorm:"primaryKey;auto_increment"`
+	gorm.Model
 	// 用户名
 	Name string `gorm:"not null"`
 	// 密码(md5(Pass))
@@ -27,8 +26,8 @@ type Card struct {
 	gorm.Model
 	// 卡密
 	Key string
-	// 有效租约
-	Lease time.Time
+	// 结束时间
+	EndDate time.Time
 	// 创建用户
 	UserID uint
 }
