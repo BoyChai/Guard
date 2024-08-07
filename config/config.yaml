@@ -10,6 +10,7 @@ DATABASE:
 
 # 设置
 Settings:
+  Port: 8080
   SuperUserName: admin
   SuperUserPass: Qwer1234
   PassSalt: GUARD
