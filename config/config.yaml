@@ -1,3 +1,5 @@
+# 数据库相关信息
+# 目前类型只支持sqlite
 DATABASE:
   DB_TYPE: "sqlite"
   DB_HOST: "localhost"
@@ -5,3 +7,9 @@ DATABASE:
   DB_USER: "root"
   DB_PASSWORD: "Qwer1234"
   DB_NAME: "Guard"
+
+# 设置
+Settings:
+  SuperUserName: admin
+  SuperUserPass: Qwer1234
+  PassSalt: GUARD
