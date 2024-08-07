@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"strings"
+	"time"
 
 	"github.com/BoyChai/Guard/dao"
 	"github.com/BoyChai/Guard/utils"
@@ -38,10 +39,16 @@ func process(conn net.Conn) {
 	var recvData string // 保存接收到的数据的变量
 
 	reader := bufio.NewReader(conn)
-	delimiter := "\r\n"
+	delimiter := viper.GetString("Settings.Socket_EndSymbol")
 	buf := make([]byte, 1024)
 
 	for {
+		// 设置读取操作的超时时间10秒
+		err := conn.SetReadDeadline(time.Now().Add(time.Duration(viper.GetInt64("Settings.Socket_Timeout")) * time.Second))
+		if err != nil {
+			fmt.Println("[Socket] " + conn.RemoteAddr().String() + " connection timed out: " + err.Error())
+			return
+		}
 		n, err := reader.Read(buf)
 		if err != nil {
 			fmt.Println(err)
@@ -58,24 +65,22 @@ func process(conn net.Conn) {
 	// 处理完整的消息
 	data, err := utils.DecryptWithPrivateKey(recvData)
 	if err != nil {
-		conn.Write([]byte("No, that's not right: " + err.Error()))
-		log.Fatalln(fmt.Sprintln("[Socket] " + conn.RemoteAddr().String() + " No, that's not right: " + err.Error()))
-
+		conn.Write([]byte("No, that's not right: " + err.Error() + delimiter))
+		fmt.Println("[Socket] " + conn.RemoteAddr().String() + " No, that's not right: " + err.Error())
 		return
 	}
 	isTrue, err := dao.Dao.CheckCard(data)
 	if !isTrue {
-		conn.Write([]byte("No, that's not right: " + err.Error()))
-		log.Fatalln(fmt.Sprintln("[Socket] " + conn.RemoteAddr().String() + " No, that's not right: " + err.Error()))
-
+		conn.Write([]byte("No, that's not right: " + err.Error() + delimiter))
+		fmt.Println("[Socket] " + conn.RemoteAddr().String() + " No, that's not right: " + err.Error())
 		return
 	}
 	log.Println(recvData)
 	signData, err := utils.SignData(recvData)
 	if !isTrue {
-		conn.Write([]byte("server error:" + err.Error()))
-		log.Fatalln(fmt.Sprintln("[Socket] " + conn.RemoteAddr().String() + " server error:" + err.Error()))
+		conn.Write([]byte("server error:" + err.Error() + delimiter))
+		fmt.Println("[Socket] " + conn.RemoteAddr().String() + " server error:" + err.Error())
 		return
 	}
-	conn.Write([]byte(signData))
+	conn.Write([]byte(signData + delimiter))
 }

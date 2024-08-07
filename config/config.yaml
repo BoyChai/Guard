@@ -19,3 +19,5 @@ Settings:
   Private_Key_PATH: "private.pem"
   Socket: true
   Socket_Port: 7780
+  Socket_Timeout: 3
+  Socket_EndSymbol: "\n"
