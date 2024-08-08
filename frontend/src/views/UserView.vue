@@ -1,8 +1,8 @@
 <template>
   <!-- <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div> -->
+      <img alt="Vue logo" src="../assets/logo.png">
+      <HelloWorld msg="Welcome to Your Vue.js App"/>
+    </div> -->
   <n-split
     direction="horizontal"
     style="height: 100%; width: 100%"
@@ -11,7 +11,7 @@
     <template #1>
       <div style="margin-top: 10px; margin-bottom: 10px"><h1>Home</h1></div>
       <div>
-        <Menu page="home" style="height: 100%" />
+        <Menu page="user" style="height: 100%" />
       </div>
     </template>
     <template #2>
@@ -27,7 +27,7 @@
 import Menu from "@/components/Menu.vue";
 
 export default {
-  name: "HomeView",
+  name: "UserView",
   components: {
     Menu,
   },
