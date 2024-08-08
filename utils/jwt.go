@@ -35,17 +35,18 @@ func GenerateToken(id string) (string, error) {
 
 // ParseToken 解析token
 func ParseToken(tokenString string) (*MyClaims, error) {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	claims := &MyClaims{}
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		// 校验签名是否被篡改
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("not authorization")
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		//返回密钥与上面签发时保持一致
+		// 返回密钥与上面签发时保持一致
 		return []byte(SECRET), nil
 	})
 	if err != nil {
 		fmt.Println("parse token failed ", err)
-		//处理token解析后的各种错误
+		// 处理token解析后的各种错误
 		if errors.Is(err, jwt.ErrTokenMalformed) {
 			return nil, errors.New("TokenMalformed")
 		} else if errors.Is(err, jwt.ErrTokenExpired) {
@@ -56,7 +57,7 @@ func ParseToken(tokenString string) (*MyClaims, error) {
 			return nil, errors.New("TokenInvalid")
 		}
 	}
-	if claims, ok := token.Claims.(*MyClaims); ok && token.Valid {
+	if token.Valid {
 		return claims, nil
 	}
 	return nil, errors.New("TokenInvalid")
