@@ -4,7 +4,9 @@
     <router-link to="/about">About</router-link>
   </nav> -->
   <n-notification-provider>
-    <router-view />
+    <n-dialog-provider>
+      <router-view />
+    </n-dialog-provider>
   </n-notification-provider>
 </template>
 
