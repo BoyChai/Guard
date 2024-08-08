@@ -16,7 +16,7 @@ type dao struct {
 type User struct {
 	gorm.Model
 	// 用户名
-	Name string `gorm:"not null"`
+	Name string `gorm:"not null;unique"`
 	// 密码(md5(Pass))
 	Pass string `gorm:"not null"`
 }

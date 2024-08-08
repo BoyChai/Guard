@@ -37,7 +37,8 @@ func (d *dao) DeleteUserByID(id uint) error {
 // 列出用户
 func (d *dao) ListUser() ([]User, error) {
 	var users []User
-	err := Dao.db.Find(&users).Error
+	// err := Dao.db.Find(&users).Error
+	err := Dao.db.Select("id, name, created_at, updated_at").Find(&users).Error
 	return users, err
 }
 

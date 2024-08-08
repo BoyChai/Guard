@@ -42,23 +42,25 @@ func (c *card) CreateCard(ctx *gin.Context) {
 		return
 	}
 	params := new(struct {
-		Key  string    `form:"key" `
-		Time time.Time `form:"time"  binding:"required"`
+		Key  string `form:"key" `
+		Time int64  `form:"time"  binding:"required"`
 	})
 	if err := ctx.ShouldBindJSON(&params); err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.HtpJson("绑定参数错误", err.Error()))
 		return
 	}
+	timeObj := time.Unix(params.Time, 0)
 	// 如果key等于空则生成uuid当成key
 	if params.Key == "" {
 		params.Key = utils.GenerateUUID()
 	}
-	idNum, err := strconv.Atoi(id)
+
+	idNum, err := strconv.Atoi(utils.Trim(id))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.HtpJson("claims信息转换失败", err.Error()))
 		return
 	}
-	if err := dao.Dao.CreateCard(params.Key, params.Time, uint(idNum)); err != nil {
+	if err := dao.Dao.CreateCard(params.Key, timeObj, uint(idNum)); err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.HtpJson("创建卡密失败", err.Error()))
 		return
 	}
@@ -97,14 +99,18 @@ func (c *card) UpdateCardEndDateByID(ctx *gin.Context) {
 		return
 	}
 	params := new(struct {
-		ID   uint      `form:"id" binding:"required"`
-		Time time.Time `form:"time" binding:"required"`
+		ID   uint  `form:"id" binding:"required"`
+		Time int64 `form:"time" binding:"required"`
 	})
+
 	if err := ctx.ShouldBindJSON(&params); err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.HtpJson("绑定参数错误", err.Error()))
 		return
 	}
-	if err := dao.Dao.UpdateCardEndDateByID(params.ID, params.Time); err != nil {
+
+	timeObj := time.Unix(params.Time, 0)
+
+	if err := dao.Dao.UpdateCardEndDateByID(params.ID, timeObj); err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.HtpJson("修改卡密有效期失败", err.Error()))
 		return
 	}
