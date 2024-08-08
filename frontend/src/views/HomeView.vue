@@ -9,7 +9,9 @@
     default-size="22%"
   >
     <template #1>
-      <div style="margin-top: 10px; margin-bottom: 10px"><h1>Home</h1></div>
+      <div style="margin-top: 10px; margin-bottom: 10px">
+        <h1>Guard-卡密管理系统</h1>
+      </div>
       <div>
         <Menu page="home" style="height: 100%" />
       </div>
@@ -36,12 +38,12 @@ export default {
 
 <style>
 #header {
-  background-color: aqua;
+  /* background-color: aqua; */
   height: 100%;
   width: 100%;
 }
 #main {
-  background-color: antiquewhite;
+  /* background-color: antiquewhite; */
   height: 100%;
   width: 100%;
 }
