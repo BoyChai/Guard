@@ -17,7 +17,7 @@ func JWTAuth() gin.HandlerFunc {
 			//获取Header中的Authorization
 			token := ctx.Request.Header.Get("Authorization")
 			if token == "" {
-				ctx.JSON(http.StatusBadRequest, gin.H{
+				ctx.JSON(http.StatusUnauthorized, gin.H{
 					"msg":  "请求未携带token，无权限访问",
 					"data": nil,
 				})
@@ -29,7 +29,7 @@ func JWTAuth() gin.HandlerFunc {
 			if err != nil {
 				//token延期错误
 				if err.Error() == "TokenExpired" {
-					ctx.JSON(http.StatusBadRequest, gin.H{
+					ctx.JSON(http.StatusUnauthorized, gin.H{
 						"msg":  "授权已过期",
 						"data": nil,
 					})
@@ -37,7 +37,7 @@ func JWTAuth() gin.HandlerFunc {
 					return
 				}
 				//其他解析错误
-				ctx.JSON(http.StatusBadRequest, gin.H{
+				ctx.JSON(http.StatusUnauthorized, gin.H{
 					"msg":  err.Error(),
 					"data": nil,
 				})
