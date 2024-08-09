@@ -58,7 +58,7 @@ import Menu from "@/components/Menu.vue";
 import { ref, getCurrentInstance, h } from "vue";
 import { NButton, useNotification, useDialog } from "naive-ui";
 
-const createStatus = ref(true);
+const createStatus = ref(false);
 
 // 引入axios
 const { proxy } = getCurrentInstance();
