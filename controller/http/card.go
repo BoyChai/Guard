@@ -134,7 +134,7 @@ func (c *card) CheckCard(ctx *gin.Context) {
 	if !isTrue {
 		ctx.JSON(http.StatusOK, utils.HtpJson("卡密校验失败", err.Error()))
 	}
-	signData, err := utils.SignData(params.Msg)
+	signData, err := utils.SignData(data)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.HtpJson("签名失败", err.Error()))
 	}
