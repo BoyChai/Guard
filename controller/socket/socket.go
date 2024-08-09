@@ -3,6 +3,7 @@ package socket
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"net"
 	"strings"
 	"time"
@@ -67,20 +68,20 @@ func process(conn net.Conn) {
 	data, err := utils.DecryptWithPrivateKey(recvData)
 	if err != nil {
 		conn.Write([]byte("1: " + err.Error() + delimiter))
-		fmt.Println("[Socket] " + conn.RemoteAddr().String() + " 解密失败： " + err.Error())
+		log.Fatalln("[Socket] " + conn.RemoteAddr().String() + " 解密失败： " + err.Error())
 		return
 	}
 	isTrue, err := dao.Dao.CheckCard(data)
 	if !isTrue {
 		conn.Write([]byte("2: " + err.Error() + delimiter))
-		fmt.Println("[Socket] " + conn.RemoteAddr().String() + " 卡密已失效： " + err.Error())
+		log.Fatalln("[Socket] " + conn.RemoteAddr().String() + " 卡密已失效： " + err.Error())
 		return
 	}
-	fmt.Println("[Socket] " + conn.RemoteAddr().String() + " 校验成功：" + data)
+	log.Fatalln("[Socket] " + conn.RemoteAddr().String() + " 校验成功：" + data)
 	signData, err := utils.SignData(data)
 	if err != nil {
 		conn.Write([]byte("server error:" + err.Error() + delimiter))
-		fmt.Println("[Socket] " + conn.RemoteAddr().String() + " server error:" + err.Error())
+		log.Fatalln("[Socket] " + conn.RemoteAddr().String() + " server error:" + err.Error())
 		return
 	}
 	conn.Write([]byte(signData + delimiter))
